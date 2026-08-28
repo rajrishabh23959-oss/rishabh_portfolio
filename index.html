@@ -58,7 +58,6 @@
             background: var(--light-bg);
             color: var(--ink);
             overflow-x: hidden;
-            cursor: none;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
         }
@@ -79,68 +78,7 @@
             opacity: 0.04;
         }
 
-        /* === CUSTOM CURSOR === */
-        .cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--marigold);
-            pointer-events: none;
-            z-index: 10001;
-            transform: translate(-50%, -50%);
-            transition: background 0.2s, width 0.2s, height 0.2s;
-            mix-blend-mode: difference;
-        }
 
-        .cursor-ring {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--marigold);
-            pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
-        }
-
-        .cursor-dot.hovering {
-            width: 14px;
-            height: 14px;
-            background: var(--rose);
-        }
-
-        .cursor-ring.hovering {
-            width: 55px;
-            height: 55px;
-            border-color: var(--rose);
-            background: rgba(181, 81, 74, 0.08);
-        }
-
-        .cursor-particle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            background: var(--marigold-glow);
-            opacity: 0.7;
-            transition: none;
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            body {
-                cursor: auto;
-            }
-
-            .cursor-dot,
-            .cursor-ring,
-            .cursor-particle {
-                display: none !important;
-            }
-        }
 
         /* === SECTIONS === */
         .section-dark {
@@ -534,6 +472,12 @@
 
         .washi-rose {
             background-color: var(--rose);
+            background-blend-mode: overlay;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);
+        }
+
+        .washi-sage {
+            background-color: var(--sage);
             background-blend-mode: overlay;
             background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.25) 4px, rgba(255, 255, 255, 0.25) 8px);
         }
@@ -1179,7 +1123,7 @@
             gap: 8px;
             transform: rotate(-2deg);
         }
-        
+
         .process-step:nth-child(even) {
             transform: rotate(2deg);
         }
@@ -1712,6 +1656,40 @@
             align-items: start;
         }
 
+        .personality-cards-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .personality-card {
+            padding: 22px 20px;
+        }
+
+        .personality-card-heading {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--cream-text);
+            margin-bottom: 8px;
+            line-height: 1.35;
+        }
+
+        .personality-card-body {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 0.78rem;
+            color: rgba(243, 236, 218, 0.65);
+            line-height: 1.65;
+        }
+
+        @media (max-width: 600px) {
+            .personality-cards-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .timeline-card {
             padding: 32px;
         }
@@ -2227,11 +2205,7 @@
                 scroll-behavior: auto !important;
             }
 
-            .cursor-dot,
-            .cursor-ring,
-            .cursor-particle {
-                display: none !important;
-            }
+
         }
 
         /* === RESPONSIVE STACKING === */
@@ -2307,8 +2281,7 @@
 <body>
 
     <!-- CUSTOM CURSOR -->
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
+
 
     <!-- KONAMI EASTER EGG -->
     <div class="easter-egg-overlay" id="easterEgg">
@@ -2419,14 +2392,11 @@
             </div>
 
             <div class="hero-ctas reveal reveal-d5">
-                <div class="magnetic-wrap"><a href="rishabh_cv.pdf" download class="pill pill-filled magnetic-btn"><i
-                            class="fas fa-file-pdf"></i> Download CV</a></div>
-                <div class="magnetic-wrap"><a href="#contact" class="pill magnetic-btn"
-                        style="background:var(--rose);border-color:var(--ink);color:#fff;"><i
-                            class="fas fa-briefcase"></i> Hire Me (Internship)</a></div>
-                <div class="magnetic-wrap"><a href="#projects" class="pill magnetic-btn"
-                        style="border-color:var(--cream-text);color:var(--cream-text);"><i
-                            class="fas fa-diagram-project"></i> Projects</a></div>
+                <div class="magnetic-wrap"><a href="#projects" class="pill pill-filled magnetic-btn"><i
+                            class="fas fa-diagram-project"></i> View Projects</a></div>
+                <div class="magnetic-wrap"><a href="rishabh_cv.pdf" download class="pill magnetic-btn"
+                        style="border-color:var(--cream-text);color:var(--cream-text);"><i class="fas fa-file-pdf"></i>
+                        Download Resume</a></div>
             </div>
 
             <div class="hero-socials reveal reveal-d6">
@@ -2434,10 +2404,6 @@
                     aria-label="GitHub"><i class="fab fa-github"></i></a>
                 <a href="https://www.linkedin.com/in/rishabh-raj-804755382" target="_blank" class="social-pill"
                     aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://www.instagram.com/rishabh_singh_18_k?igsh=dml2MnFpMnBkNjB3" target="_blank"
-                    class="social-pill" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://share.google/WtsvRBkh901gSd21U" target="_blank" class="social-pill"
-                    aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://youtube.com/@btechcsbs9279" target="_blank" class="social-pill" aria-label="YouTube"><i
                         class="fab fa-youtube"></i></a>
             </div>
@@ -2718,6 +2684,35 @@
                     <div class="skill-desc">Bridging engineering complexity with clear business-driven communication.
                         Multilingual advantage across 5 languages.</div>
                 </div>
+                <div class="index-card skill-card tilt-card reveal reveal-d1 card-rot-1" style="position:relative;">
+                    <div class="washi-tape washi-sage"
+                        style="top:-8px;right:16px;transform:rotate(7deg);width:62px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="skill-icon">📊</div>
+                    <div class="skill-card-title">Accounting &amp; Tally</div>
+                    <div class="skill-desc">Practical accounting fundamentals paired with hands-on Tally software
+                        expertise — bookkeeping, ledger management, and financial record-keeping applied directly to
+                        fintech project development.</div>
+                </div>
+                <div class="index-card skill-card tilt-card reveal reveal-d2 card-rot-2" style="position:relative;">
+                    <div class="washi-tape washi-marigold"
+                        style="top:-8px;left:12px;transform:rotate(-12deg);width:58px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="skill-icon">🗄️</div>
+                    <div class="skill-card-title">DBMS</div>
+                    <div class="skill-desc">Solid grounding in database management systems — schema design,
+                        normalization, SQL querying, and transactional integrity across relational databases.</div>
+                </div>
+                <div class="index-card skill-card tilt-card reveal reveal-d3 card-rot-1" style="position:relative;">
+                    <div class="washi-tape washi-rose"
+                        style="top:-8px;right:20px;transform:rotate(15deg);width:56px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="skill-icon">🧩</div>
+                    <div class="skill-card-title">OOPs</div>
+                    <div class="skill-desc">Strong object-oriented programming foundation — class design, inheritance,
+                        encapsulation, and polymorphism — applied across game development and backend architecture.
+                    </div>
+                </div>
             </div>
 
             <div class="toolbox reveal reveal-d2">
@@ -2738,7 +2733,10 @@
                     <span class="pill"><i class="fas fa-balance-scale"></i> Economics</span>
                     <span class="pill"><i class="fas fa-shield-alt"></i> Fintech Security</span>
                     <span class="pill"><i class="fas fa-building-columns"></i> Core Banking</span>
-                    <span class="pill"><i class="fas fa-user-tie"></i> Buisness communication</span>
+                    <span class="pill"><i class="fas fa-user-tie"></i> Business Communication</span>
+                    <span class="pill"><i class="fas fa-calculator"></i> TALLY</span>
+                    <span class="pill"><i class="fas fa-database"></i> DBMS</span>
+                    <span class="pill"><i class="fas fa-cubes"></i> OOPS</span>
                 </div>
             </div>
 
@@ -2754,7 +2752,7 @@
         <div class="section-inner">
             <div class="section-eyebrow reveal">Workflow</div>
             <h2 class="section-title reveal" style="font-size: 2rem;">How I Think</h2>
-            
+
             <div class="process-flow reveal reveal-d2">
                 <div class="process-step"><i class="fas fa-lightbulb"></i> Idea</div>
                 <div class="process-step"><i class="fas fa-pen-ruler"></i> Architecture Sketch</div>
@@ -2770,22 +2768,29 @@
                     <span class="bug-title">🔍 Fix This Bug: Treasure Hunter</span>
                     <span class="reality-tag" style="border-color:#555;color:#aaa;background:#222;">Interactive</span>
                 </div>
-                <p style="margin-bottom:12px;opacity:0.9;"><strong>The Problem:</strong> At low speeds, the player collides with walls perfectly. But at high speeds, the player "tunnels" right through solid walls.</p>
-                
+                <p style="margin-bottom:12px;opacity:0.9;"><strong>The Problem:</strong> At low speeds, the player
+                    collides with walls perfectly. But at high speeds, the player "tunnels" right through solid walls.
+                </p>
+
                 <div class="bug-code">
-<span style="color:#888;"># Original PyGame Collision Logic</span>
-def check_collision(player_rect, wall_rect):
-<div class="highlight-error">    if player_rect.colliderect(wall_rect):
-        return True  <span style="color:#ff4444;"># FAILS AT HIGH SPEED!</span></div>
-    return False
+                    <span style="color:#888;"># Original PyGame Collision Logic</span>
+                    def check_collision(player_rect, wall_rect):
+                    <div class="highlight-error"> if player_rect.colliderect(wall_rect):
+                        return True <span style="color:#ff4444;"># FAILS AT HIGH SPEED!</span></div>
+                    return False
                 </div>
-                
-                <button class="bug-reveal-btn" onclick="document.getElementById('bugExplanation').classList.add('active'); this.style.display='none';">Reveal the Fix</button>
-                
+
+                <button class="bug-reveal-btn"
+                    onclick="document.getElementById('bugExplanation').classList.add('active'); this.style.display='none';">Reveal
+                    the Fix</button>
+
                 <div class="bug-explanation" id="bugExplanation">
                     <strong>The Fix: Swept AABB Collision</strong><br><br>
-                    Instead of just checking if two rectangles overlap at the <em>current</em> frame, we must check the <em>path</em> the player travelled since the last frame. If the distance moved in one frame is larger than the wall's thickness, `colliderect` never catches the overlap. <br><br>
-                    <strong>I rewrote the physics engine to use velocity vectors and raycasting along the movement path.</strong> This catches the collision <em>before</em> the player tunnels through.
+                    Instead of just checking if two rectangles overlap at the <em>current</em> frame, we must check the
+                    <em>path</em> the player travelled since the last frame. If the distance moved in one frame is
+                    larger than the wall's thickness, `colliderect` never catches the overlap. <br><br>
+                    <strong>I rewrote the physics engine to use velocity vectors and raycasting along the movement
+                        path.</strong> This catches the collision <em>before</em> the player tunnels through.
                 </div>
             </div>
         </div>
@@ -2813,10 +2818,16 @@ def check_collision(player_rect, wall_rect):
             <div class="sticky-note sticky-marigold reveal">real projects, not tutorials 🔥</div>
             <h2 class="section-title reveal">Strategic Engineering</h2>
             <div class="stitch reveal"></div>
-            
-            <div class="reveal reveal-d1" style="background: rgba(243,236,218,0.05); border-left: 4px solid var(--marigold); padding: 20px; margin-bottom: 40px; border-radius: 0 8px 8px 0;">
-                <p style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7; color: var(--cream-text); margin: 0;">
-                    <strong style="color: var(--marigold-glow);">Why Fintech?</strong> A combination of <strong>JEE Advanced</strong> (twice), the <strong>NDA exam</strong>, and maintaining a <strong>9.2+ CGPA</strong> instilled a rigorous engineering discipline. Pairing that with my <strong>B.Tech+MBA in Banking Technology</strong> gives me a rare dual perspective. I don't just build apps; I build systems that understand financial workflows, concurrency, and trust.
+
+            <div class="reveal reveal-d1"
+                style="background: rgba(243,236,218,0.05); border-left: 4px solid var(--marigold); padding: 20px; margin-bottom: 40px; border-radius: 0 8px 8px 0;">
+                <p
+                    style="font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7; color: var(--cream-text); margin: 0;">
+                    <strong style="color: var(--marigold-glow);">Why Fintech?</strong> A combination of <strong>JEE
+                        Advanced</strong> (twice), the <strong>NDA exam</strong>, and maintaining a <strong>9.2+
+                        CGPA</strong> instilled a rigorous engineering discipline. Pairing that with my
+                    <strong>B.Tech+MBA in Banking Technology</strong> gives me a rare dual perspective. I don't just
+                    build apps; I build systems that understand financial workflows, concurrency, and trust.
                 </p>
             </div>
 
@@ -2831,7 +2842,9 @@ def check_collision(player_rect, wall_rect):
                     <div class="project-desc">A comprehensive, multi-portal ed-tech platform combining the psychology of
                         gaming with AI to build strong study habits. Features a "Social + Habit Loop" using Streaks,
                         EduCoins, and Faction Wars to drive retention.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd design the gamification mechanics deeper into the core learning loop from day one, rather than layering points on top of static content.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd design the gamification
+                            mechanics deeper into the core learning loop from day one, rather than layering points on
+                            top of static content.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">EdTech</span>
@@ -2855,7 +2868,9 @@ def check_collision(player_rect, wall_rect):
                     <div class="project-desc">A full-stack micro-consulting platform enabling users to book and pay for
                         expert sessions. Built solo with React/TS, Express, MongoDB, PostgreSQL, Razorpay, Gemini AI,
                         and Twilio notifications.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd evaluate database needs strictly per-feature earlier, instead of trying to force relational data into MongoDB before adopting PostgreSQL.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd evaluate database needs
+                            strictly per-feature earlier, instead of trying to force relational data into MongoDB before
+                            adopting PostgreSQL.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React</span>
@@ -2878,7 +2893,8 @@ def check_collision(player_rect, wall_rect):
                     <div class="project-desc">An AI-powered mobile habit tracking app built with React Native & FastAPI.
                         Combines eco-friendly gamified UI with an AI Chatbot Coach for personalized diet and workout
                         advice based on mood and sleep.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would decouple the AI chat from the main tracking UI more cleanly to prevent latency in logging simple habits.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would decouple the AI chat
+                            from the main tracking UI more cleanly to prevent latency in logging simple habits.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React Native</span>
@@ -2903,7 +2919,9 @@ def check_collision(player_rect, wall_rect):
                         captures typing patterns — rhythm, pressure, and timing — to verify user identity beyond
                         traditional passwords, adding a robust, frictionless layer of fraud detection and account
                         protection for financial platforms.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd implement a dynamic tolerance band for typing deviations much earlier, rather than using a rigid fingerprint that flagged legitimate tiredness as fraud.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd implement a dynamic
+                            tolerance band for typing deviations much earlier, rather than using a rigid fingerprint
+                            that flagged legitimate tiredness as fraud.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI Security</span>
@@ -2928,7 +2946,9 @@ def check_collision(player_rect, wall_rect):
                         detection systems. The project features custom physics handling, modular class-based
                         architecture for game entities, and optimized rendering loops — demonstrating strong
                         fundamentals in algorithmic thinking, state management, and performance-conscious game design.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would separate the physics update loop from the rendering loop immediately to prevent frame-rate-dependent game physics.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would separate the physics
+                            update loop from the rendering loop immediately to prevent frame-rate-dependent game
+                            physics.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Game Dev</span>
@@ -2954,7 +2974,9 @@ def check_collision(player_rect, wall_rect):
                     <div class="project-desc">A full-stack UPI payments app built end-to-end: real-time transfers, UPI
                         Lite, SentinAI fraud detection, shared vaults, savings goals, and an AI-powered bookkeeping
                         module with double-entry ledger logic. Deployed live with Docker + Nginx on Render.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd pin dependency versions for anything touching auth or payments from the very first commit to avoid silent environment mismatches.</div>
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd pin dependency versions for
+                            anything touching auth or payments from the very first commit to avoid silent environment
+                            mismatches.</div>
                     </div>
                     <div class="project-tags">
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">FastAPI</span>
@@ -3095,6 +3117,16 @@ def check_collision(player_rect, wall_rect):
                     <div>
                         <div class="badge-title">SIH 2025 Participant</div>
                         <div class="badge-sub">Smart India Hackathon — University Level Selection</div>
+                    </div>
+                </div>
+                <div class="index-card badge-row reveal reveal-d5" style="position:relative;">
+                    <div class="washi-tape washi-sage"
+                        style="top:-8px;right:16px;transform:rotate(9deg);width:55px;height:14px;"></div>
+                    <div class="badge-icon-circle" style="border-color:var(--sage);color:var(--sage);">🚀</div>
+                    <div>
+                        <div class="badge-title">SIH 2026 Participant</div>
+                        <div class="badge-sub">Smart India Hackathon — Team GravityX, building EklavyaX, a gamified STEM
+                            learning platform connecting rural and semi-urban students with teachers.</div>
                     </div>
                 </div>
                 <div class="index-card badge-row reveal reveal-d5" style="position:relative;">
@@ -3339,6 +3371,23 @@ def check_collision(player_rect, wall_rect):
                             <div class="rt-sub">Board Examination</div>
                         </div>
                     </div>
+                    <div class="personality-cards-row">
+                        <div class="index-card personality-card reveal reveal-d2" style="position:relative;">
+                            <div class="washi-tape washi-sage"
+                                style="top:-8px;left:14px;transform:rotate(-9deg);width:52px;height:14px;"></div>
+                            <div class="personality-card-heading">I debug better than I sleep.</div>
+                            <div class="personality-card-body">3 AM commits, console.log("why"), and eventual victory.
+                                My git history tells the real story of every all-nighter.</div>
+                        </div>
+                        <div class="index-card personality-card reveal reveal-d3" style="position:relative;">
+                            <div class="washi-tape washi-rose"
+                                style="top:-8px;right:14px;transform:rotate(11deg);width:52px;height:14px;"></div>
+                            <div class="personality-card-heading">Building for the underbanked.</div>
+                            <div class="personality-card-body">Every project traces back to one idea: financial systems
+                                should work for everyone, not just people who already have access. That's the thread
+                                from RenoPay to SentinAI.</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="resume-side">
@@ -3500,74 +3549,6 @@ def check_collision(player_rect, wall_rect):
         (function () {
             'use strict';
             const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-            // ==============================
-            // CUSTOM CURSOR + PARTICLE TRAIL
-            // ==============================
-            if (!isTouchDevice) {
-                const dot = document.getElementById('cursorDot');
-                const ring = document.getElementById('cursorRing');
-                let mx = -100, my = -100, dx = -100, dy = -100, rx = -100, ry = -100;
-                const particles = [];
-                const MAX_PARTICLES = 18;
-                let particleIdx = 0;
-                let lastPx = 0, lastPy = 0;
-
-                // Create particle pool
-                for (let i = 0; i < MAX_PARTICLES; i++) {
-                    const p = document.createElement('div');
-                    p.className = 'cursor-particle';
-                    p.style.opacity = '0';
-                    document.body.appendChild(p);
-                    particles.push({ el: p, x: 0, y: 0, life: 0 });
-                }
-
-                document.addEventListener('mousemove', e => {
-                    mx = e.clientX; my = e.clientY;
-                    // Spawn particle if moved enough
-                    const dist = Math.hypot(mx - lastPx, my - lastPy);
-                    if (dist > 14) {
-                        const p = particles[particleIdx % MAX_PARTICLES];
-                        p.x = mx; p.y = my; p.life = 1;
-                        p.el.style.left = mx + 'px'; p.el.style.top = my + 'px';
-                        p.el.style.opacity = '0.6'; p.el.style.transform = 'translate(-50%,-50%) scale(1)';
-                        particleIdx++;
-                        lastPx = mx; lastPy = my;
-                    }
-                });
-
-                // Hover detection
-                const interactiveSelector = 'a, button, .pill, .index-card, .gallery-tile, .magnetic-btn, input, textarea, .social-pill, .back-to-top, .spine-dot, .patch-badge';
-                document.addEventListener('mouseover', e => {
-                    if (e.target.closest(interactiveSelector)) {
-                        dot.classList.add('hovering'); ring.classList.add('hovering');
-                    }
-                });
-                document.addEventListener('mouseout', e => {
-                    if (e.target.closest(interactiveSelector)) {
-                        dot.classList.remove('hovering'); ring.classList.remove('hovering');
-                    }
-                });
-
-                function animateCursor() {
-                    // Dot follows instantly
-                    dx += (mx - dx) * 0.35; dy += (my - dy) * 0.35;
-                    dot.style.left = dx + 'px'; dot.style.top = dy + 'px';
-                    // Ring lags behind
-                    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-                    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-                    // Fade particles
-                    for (const p of particles) {
-                        if (p.life > 0) {
-                            p.life -= 0.04;
-                            if (p.life <= 0) { p.el.style.opacity = '0'; p.life = 0; }
-                            else { p.el.style.opacity = String(p.life * 0.5); p.el.style.transform = `translate(-50%,-50%) scale(${p.life})`; }
-                        }
-                    }
-                    requestAnimationFrame(animateCursor);
-                }
-                animateCursor();
-            }
 
             // ==============================
             // HERO PARTICLE CANVAS
@@ -3867,7 +3848,7 @@ def check_collision(player_rect, wall_rect):
                     readTime: '5 min read',
                     status: 'Draft',
                     content: `
-                        <p>EklavyaX (also called VidyaSetu) started as our team ShikshaVerse's submission for Smart India Hackathon 2026 — a gamified STEM learning platform meant to connect rural and semi-urban students with teachers. The brief sounds simple: make learning fun. Actually designing it taught me how easy it is to get "gamified education" wrong.</p>
+                        <p>EklavyaX started as our team GravityXsubmission for Smart India Hackathon 2026 — a gamified STEM learning platform meant to connect rural and semi-urban students with teachers. The brief sounds simple: make learning fun. Actually designing it taught me how easy it is to get "gamified education" wrong.</p>
                         <h2>The trap: gamification as decoration</h2>
                         <p>My first instinct — and I think this is most people's first instinct — was to bolt game elements onto existing lessons. Add a points counter. Add a leaderboard. Add some badges. It looks gamified, but it doesn't change how the student actually engages with the material. It's decoration, not design.</p>
                         <h2>What we tried instead</h2>
