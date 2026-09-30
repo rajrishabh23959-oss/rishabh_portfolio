@@ -1223,82 +1223,451 @@
             animation: fadeIn 0.4s ease forwards;
         }
 
-        /* === GALLERY === */
-        .gallery-grid {
+        /* === SCRAPBOOK ALBUM FOLDERS & GALLERY === */
+        .albums-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
         }
 
-        .gallery-tile {
-            aspect-ratio: 4/3;
+        .album-folder-card {
+            background: var(--card-bg);
+            border: 3px solid var(--ink);
             border-radius: var(--radius-card);
-            border: 2.5px dashed var(--ink);
+            box-shadow: var(--shadow-hard);
+            padding: 24px 24px 20px 24px;
+            position: relative;
+            cursor: pointer;
+            transition: transform var(--transition-spring), box-shadow var(--transition-smooth);
             display: flex;
             flex-direction: column;
+            user-select: none;
+        }
+
+        .album-folder-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 12px 12px 0 var(--ink);
+        }
+
+        .album-folder-tab {
+            position: absolute;
+            top: 0;
+            right: 28px;
+            background: var(--ink);
+            color: var(--cream-text);
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 4px 14px 6px 14px;
+            border-radius: 0 0 10px 10px;
+            text-transform: uppercase;
+        }
+
+        .album-cover-stack {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/10;
+            margin: 12px 0 16px 0;
+            display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .album-stack-img {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--ink);
+            background: #E8DECA;
+            box-shadow: var(--shadow-hard-sm);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .album-stack-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .album-stack-img.stack-3 {
+            transform: scale(0.92) rotate(-4deg) translateY(-4px);
+            z-index: 1;
+            opacity: 0.75;
+        }
+
+        .album-stack-img.stack-2 {
+            transform: scale(0.96) rotate(3deg) translateY(-2px);
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .album-stack-img.stack-1 {
+            transform: scale(1) rotate(0deg);
+            z-index: 3;
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        .album-folder-card:hover .album-stack-img.stack-3 {
+            transform: scale(0.92) rotate(-7deg) translateY(-8px) translateX(-6px);
+        }
+
+        .album-folder-card:hover .album-stack-img.stack-2 {
+            transform: scale(0.96) rotate(6deg) translateY(-6px) translateX(6px);
+        }
+
+        .album-folder-card:hover .album-stack-img.stack-1 {
+            transform: scale(1.02) rotate(-0.5deg);
+        }
+
+        .album-folder-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(19, 42, 58, 0.9);
+            color: var(--cream-text);
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(243, 236, 218, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .album-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .album-desc {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 0.92rem;
+            color: var(--ink);
+            opacity: 0.82;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .album-open-btn {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 2px solid var(--ink);
+            background: var(--dark-bg);
+            color: var(--cream-text);
+            box-shadow: 3px 3px 0 var(--marigold);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .album-folder-card:hover .album-open-btn {
+            background: var(--marigold);
+            color: var(--ink);
+            box-shadow: 4px 4px 0 var(--ink);
+        }
+
+        /* Album View Container (shown when an album is clicked) */
+        .album-view-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .album-view-container.active {
+            display: block;
+        }
+
+        .album-view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #FFFDF8;
+            border: 2.5px solid var(--ink);
+            border-radius: 16px;
+            padding: 16px 22px;
+            box-shadow: var(--shadow-hard-sm);
+            margin-bottom: 25px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 26px;
+        }
+
+        .polaroid-card {
+            background: #FFFDF9;
+            border: 2.5px solid var(--ink);
+            border-radius: 14px;
+            padding: 14px 14px 18px 14px;
+            box-shadow: var(--shadow-hard-sm);
+            position: relative;
+            cursor: pointer;
+            transition: transform var(--transition-spring), box-shadow var(--transition-smooth), opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-8px) scale(1.02) rotate(0deg) !important;
+            box-shadow: var(--shadow-hard);
+            z-index: 10;
+        }
+
+        .polaroid-img-frame {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1.5px solid rgba(27, 36, 32, 0.2);
+            position: relative;
+            background: #e7dfce;
+        }
+
+        .polaroid-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .polaroid-card:hover .polaroid-img-frame img {
+            transform: scale(1.06);
+        }
+
+        .polaroid-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(19, 42, 58, 0.88);
+            color: var(--cream-text);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(243, 236, 218, 0.3);
+            letter-spacing: 0.04em;
+            pointer-events: none;
+        }
+
+        .polaroid-tag.gold {
+            background: rgba(217, 154, 52, 0.95);
+            color: var(--ink);
+            font-weight: 700;
+            border-color: var(--ink);
+        }
+
+        .polaroid-caption {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .polaroid-title {
+            font-family: var(--font-hand);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+        }
+
+        .polaroid-meta {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: #636b66;
+            letter-spacing: 0.04em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2px;
+        }
+
+        .polaroid-zoom-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.58rem;
+            color: var(--rose);
+            font-weight: 600;
+        }
+
+        /* === PROJECT ACTION BUTTONS === */
+        .project-btn-row {
+            display: flex;
+            align-items: center;
             gap: 10px;
-            padding: 20px;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .project-btn-row .pill,
+        .project-btn-row a,
+        .project-btn-row span {
+            flex: 1;
+            justify-content: center;
             text-align: center;
-            transition: all var(--transition-smooth);
+            font-size: 0.56rem;
+            padding: 8px 12px;
+            white-space: nowrap;
+        }
+
+        /* === UNIVERSAL LIGHTBOX MODAL === */
+        .lightbox-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(14, 32, 44, 0.92);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-panel {
             background: var(--card-bg);
+            border: 3.5px solid var(--ink);
+            border-radius: var(--radius-card);
+            box-shadow: 14px 14px 0 var(--ink);
+            max-width: 900px;
+            width: 100%;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .gallery-tile:hover {
-            border-style: solid;
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-hard);
+        @keyframes modalPop {
+            from {
+                transform: scale(0.92);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
-        .gallery-tile i {
-            font-size: 1.8rem;
-            opacity: 0.45;
-            transition: opacity 0.3s;
+        .lightbox-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+            color: var(--cream-text);
+            border: 2px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            cursor: pointer;
+            z-index: 20;
+            transition: transform 0.2s, background 0.2s;
         }
 
-        .gallery-tile:hover i {
-            opacity: 0.85;
+        .lightbox-close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            background: var(--rose);
         }
 
-        .gt-label {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 0.95rem;
+        .lightbox-img-wrap {
+            width: 100%;
+            height: 60vh;
+            max-height: 520px;
+            background: #0B1922;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        .gt-sub {
-            font-family: var(--font-mono);
-            font-size: 0.5rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            opacity: 0.5;
+        .lightbox-img-wrap img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
-        .gt-1 i {
-            color: var(--marigold);
+        .lightbox-info {
+            padding: 20px 24px;
+            background: var(--card-bg);
+            border-top: 2.5px solid var(--ink);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .gt-2 i {
-            color: var(--rose);
+        .lightbox-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(251, 246, 232, 0.95);
+            border: 2.5px solid var(--ink);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 var(--ink);
+            transition: all 0.2s;
+            z-index: 15;
         }
 
-        .gt-3 i {
-            color: var(--sage);
+        .lightbox-nav-btn:hover {
+            background: var(--marigold);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 4px 4px 0 var(--ink);
         }
 
-        .gt-4 i {
-            color: var(--marigold);
+        .lightbox-prev {
+            left: 16px;
         }
 
-        .gt-5 i {
-            color: var(--rose);
-        }
-
-        .gt-6 i {
-            color: var(--sage);
+        .lightbox-next {
+            right: 16px;
         }
 
         /* === CERTIFICATES / ACHIEVEMENTS === */
@@ -2300,6 +2669,7 @@
         <a href="#education" class="nav-link-desktop">Education</a>
         <a href="#skills" class="nav-link-desktop">Skills</a>
         <a href="#projects" class="nav-link-desktop">Projects</a>
+        <a href="#gallery" class="nav-link-desktop">Gallery</a>
         <a href="#achievements" class="nav-link-desktop">Achievements</a>
         <a href="#blog" class="nav-link-desktop">Blog</a>
         <a href="#resume" class="nav-link-desktop">Resume</a>
@@ -2336,6 +2706,10 @@
         <div class="spine-line">
             <div class="spine-fill" style="height:0%"></div>
         </div>
+        <a class="spine-dot" data-section="gallery" title="Gallery" aria-label="Go to Gallery"></a>
+        <div class="spine-line">
+            <div class="spine-fill" style="height:0%"></div>
+        </div>
         <a class="spine-dot" data-section="achievements" title="Achievements" aria-label="Go to Achievements"></a>
         <div class="spine-line">
             <div class="spine-fill" style="height:0%"></div>
@@ -2362,7 +2736,7 @@
 
         <div class="hero-content">
             <div class="reveal">
-                <img src="rishabh_pic.jpeg" alt="Rishabh Raj — Banking Technology Student" class="hero-avatar">
+                <img src="rishabh_pic.jpeg" alt="Rishabh Raj — Banking Technology & CSBS Student" class="hero-avatar">
             </div>
 
             <h1 class="hero-name reveal reveal-d1">Rishabh<br>Raj</h1>
@@ -2388,7 +2762,7 @@
             </p>
 
             <div class="hero-stats-strip reveal reveal-d4">
-                9.25 Latest CGPA &nbsp;·&nbsp; JEE Advanced Qualified &nbsp;·&nbsp; 100/100 Math
+                9.25 Latest CGPA &nbsp;·&nbsp; 2x 1st Prize Winner (AI &amp; Tech Quizzes 🥇) &nbsp;·&nbsp; SIH 2026 &nbsp;·&nbsp; JEE Advanced &nbsp;·&nbsp; 100/100 Math
             </div>
 
             <div class="hero-ctas reveal reveal-d5">
@@ -2437,8 +2811,8 @@
 
             <div class="about-grid">
                 <div class="about-text reveal reveal-d1">
-                    <p>I'm <strong>Rishabh Raj</strong>, currently pursuing <strong>BTECH &amp;
-                            CSBS</strong> at BANKING TECHNOLOGY DEPARTMENT in Pondicherry University. My work sits at the intersection of two worlds that
+                    <p>I'm <strong>Rishabh Raj</strong>, currently pursuing <strong>Banking Technology &amp;
+                            CSBS</strong> at Pondicherry University. My work sits at the intersection of two worlds that
                         don't usually talk to each other — <strong>low-level engineering</strong> (data structures,
                         algorithms, backend systems) and <strong>financial ecosystems</strong> (core banking, economics,
                         fintech security).</p>
@@ -2832,143 +3206,39 @@
             </div>
 
             <div class="projects-grid">
-                <!-- EklavyaX -->
-                <div class="index-card project-card tilt-card reveal reveal-d1 card-rot-2" style="position:relative;">
-                    <div class="washi-tape washi-rose"
-                        style="top:-8px;left:14px;transform:rotate(-12deg);width:65px;height:16px;"></div>
-                    <div class="tilt-glare"></div>
-                    <div class="project-number">PROJECT / 01</div>
-                    <div class="project-title">EklavyaX <span class="reality-tag">Prototype</span></div>
-                    <div class="project-desc">A comprehensive, multi-portal ed-tech platform combining the psychology of
-                        gaming with AI to build strong study habits. Features a "Social + Habit Loop" using Streaks,
-                        EduCoins, and Faction Wars to drive retention.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd design the gamification
-                            mechanics deeper into the core learning loop from day one, rather than layering points on
-                            top of static content.</div>
-                    </div>
-                    <div class="project-tags">
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">EdTech</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Gamification</span>
-                    </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <a href="https://eklavya-x.vercel.app/" target="_blank" class="pill pill-rose magnetic-btn"
-                            style="width:100%;justify-content:center;"><i class="fas fa-external-link-alt"></i> Visit
-                            EklavyaX →</a>
-                    </div>
-                </div>
-
-                <!-- MAHAN -->
-                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-1" style="position:relative;">
+                <!-- MargDarshan (New MoTA Scholarship App) -->
+                <div class="index-card project-card tilt-card reveal reveal-d1 card-rot-1"
+                    style="position:relative;border-color:var(--marigold-glow);">
                     <div class="washi-tape washi-marigold"
-                        style="top:-8px;right:14px;transform:rotate(12deg);width:65px;height:16px;"></div>
+                        style="top:-8px;right:14px;transform:rotate(9deg);width:70px;height:18px;"></div>
                     <div class="tilt-glare"></div>
-                    <div class="project-number">PROJECT / 02</div>
-                    <div class="project-title">MAHAN <span class="reality-tag">MVP / WIP</span></div>
-                    <div class="project-desc">A full-stack micro-consulting platform enabling users to book and pay for
-                        expert sessions. Built solo with React/TS, Express, MongoDB, PostgreSQL, Razorpay, Gemini AI,
-                        and Twilio notifications.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd evaluate database needs
-                            strictly per-feature earlier, instead of trying to force relational data into MongoDB before
-                            adopting PostgreSQL.</div>
+                    <div class="project-number" style="display:flex;align-items:center;gap:8px;">
+                        PROJECT / 01 <span class="flagship-badge">★ MoTA SCHOLARSHIP</span>
+                    </div>
+                    <div class="project-title">MargDarshan <span class="reality-tag">Live · MoTA</span></div>
+                    <div class="project-desc">A Unified Scholarship Mobile Application to simplify access to five MOTA scholarship schemes for tribal students. The platform features a centralized dashboard, a document wallet for reusing verified certificates, and an AI companion named SAATHI offering multilingual support. It streamlines verification using automated checks, reducing paperwork and ensuring transparent, inclusive access.
+                        <div class="project-rebuild"><strong>Key Highlight:</strong> Automated document verification pipeline and multilingual voice-ready AI companion for tribal scholarship schemes.</div>
                     </div>
                     <div class="project-tags">
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Node.js</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Gemini AI</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">MoTA Schemes</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI SAATHI</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Doc Wallet</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Next.js</span>
                     </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <span class="pill pill-filled" style="width:100%;justify-content:center;cursor:default;"><i
-                                class="fas fa-hammer"></i> Work in Progress</span>
-                    </div>
-                </div>
-
-                <!-- Habit Tracker -->
-                <div class="index-card project-card tilt-card reveal reveal-d3 card-rot-2" style="position:relative;">
-                    <div class="washi-tape washi-rose"
-                        style="top:-8px;left:14px;transform:rotate(-10deg);width:65px;height:16px;"></div>
-                    <div class="tilt-glare"></div>
-                    <div class="project-number">PROJECT / 03</div>
-                    <div class="project-title">HabitGame <span class="reality-tag">Prototype</span></div>
-                    <div class="project-desc">An AI-powered mobile habit tracking app built with React Native & FastAPI.
-                        Combines eco-friendly gamified UI with an AI Chatbot Coach for personalized diet and workout
-                        advice based on mood and sleep.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would decouple the AI chat
-                            from the main tracking UI more cleanly to prevent latency in logging simple habits.</div>
-                    </div>
-                    <div class="project-tags">
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React Native</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">FastAPI</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI Coach</span>
-                    </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <span class="pill pill-rose" style="width:100%;justify-content:center;cursor:default;"><i
-                                class="fas fa-hammer"></i> Work in Progress</span>
-                    </div>
-                </div>
-
-                <!-- SentinAI -->
-                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-1" style="position:relative;">
-                    <div class="washi-tape washi-marigold"
-                        style="top:-8px;right:14px;transform:rotate(12deg);width:65px;height:16px;"></div>
-                    <div class="tilt-glare"></div>
-                    <div class="project-number">PROJECT / 01</div>
-                    <div class="project-title">Project SentinAI <span class="reality-tag">Research Concept</span></div>
-                    <div class="project-desc">A behavioral biometrics framework designed for banking security,
-                        leveraging AI to analyze keystroke dynamics as a continuous authentication layer. The system
-                        captures typing patterns — rhythm, pressure, and timing — to verify user identity beyond
-                        traditional passwords, adding a robust, frictionless layer of fraud detection and account
-                        protection for financial platforms.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd implement a dynamic
-                            tolerance band for typing deviations much earlier, rather than using a rigid fingerprint
-                            that flagged legitimate tiredness as fraud.</div>
-                    </div>
-                    <div class="project-tags">
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI Security</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Python</span>
-                    </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <a href="sentinai.html" class="pill pill-filled magnetic-btn"
-                            style="width:100%;justify-content:center;"><i class="fas fa-rocket"></i> Launch AI Demo
-                            →</a>
-                    </div>
-                </div>
-
-                <!-- Treasure Hunter -->
-                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-2" style="position:relative;">
-                    <div class="washi-tape washi-rose"
-                        style="top:-8px;left:14px;transform:rotate(-10deg);width:65px;height:16px;"></div>
-                    <div class="tilt-glare"></div>
-                    <div class="project-number">PROJECT / 02</div>
-                    <div class="project-title">Treasure Hunter <span class="reality-tag">Engine Demo</span></div>
-                    <div class="project-desc">Developed a logic-driven 2D game environment entirely from scratch using
-                        PyGame, showcasing advanced object-oriented programming principles and real-time collision
-                        detection systems. The project features custom physics handling, modular class-based
-                        architecture for game entities, and optimized rendering loops — demonstrating strong
-                        fundamentals in algorithmic thinking, state management, and performance-conscious game design.
-                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would separate the physics
-                            update loop from the rendering loop immediately to prevent frame-rate-dependent game
-                            physics.</div>
-                    </div>
-                    <div class="project-tags">
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Game Dev</span>
-                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">PyGame</span>
-
-                    </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <a href="game.html" class="pill pill-rose magnetic-btn"
-                            style="width:100%;justify-content:center;"><i class="fas fa-play"></i> Play Game Now →</a>
+                    <div class="project-btn-row">
+                        <a href="https://margdarshan-xi.vercel.app/" target="_blank" class="pill pill-filled magnetic-btn"><i class="fas fa-bolt"></i> Live Demo</a>
+                        <a href="https://github.com/Sayandevxyz/MargDarshan" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
                     </div>
                 </div>
 
                 <!-- RenoPay (Flagship) -->
-                <div class="index-card project-card tilt-card reveal reveal-d3 card-rot-1"
+                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-1"
                     style="position:relative;border-color:var(--marigold-glow);">
-                    <div class="washi-tape washi-marigold"
-                        style="top:-8px;right:14px;transform:rotate(8deg);width:70px;height:18px;"></div>
+                    <div class="washi-tape washi-rose"
+                        style="top:-8px;left:14px;transform:rotate(-8deg);width:70px;height:18px;"></div>
                     <div class="tilt-glare"></div>
                     <div class="project-number" style="display:flex;align-items:center;gap:8px;">
-                        PROJECT / 03 <span class="flagship-badge">★ FLAGSHIP</span>
+                        PROJECT / 02 <span class="flagship-badge">★ FLAGSHIP</span>
                     </div>
                     <div class="project-title">RenoPay <span class="reality-tag">Production-ready</span></div>
                     <div class="project-desc">A full-stack UPI payments app built end-to-end: real-time transfers, UPI
@@ -2985,10 +3255,135 @@
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">UPI</span>
                         <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Capacitor</span>
                     </div>
-                    <div class="magnetic-wrap" style="margin-top:auto;">
-                        <a href="https://renopay-original.vercel.app/" target="_blank"
-                            class="pill pill-filled magnetic-btn" style="width:100%;justify-content:center;"><i
-                                class="fas fa-bolt"></i> Launch Live Demo →</a>
+                    <div class="project-btn-row">
+                        <a href="https://renopay-app-u55q.vercel.app/" target="_blank" class="pill pill-filled magnetic-btn"><i class="fas fa-bolt"></i> Live Demo</a>
+                        <a href="https://github.com/rajrishabh23959-oss/RENOPAY_ORIGINAL" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
+                    </div>
+                </div>
+
+                <!-- EklavyaX -->
+                <div class="index-card project-card tilt-card reveal reveal-d1 card-rot-2" style="position:relative;">
+                    <div class="washi-tape washi-rose"
+                        style="top:-8px;left:14px;transform:rotate(-12deg);width:65px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="project-number">PROJECT / 03</div>
+                    <div class="project-title">EklavyaX <span class="reality-tag">Prototype</span></div>
+                    <div class="project-desc">A comprehensive, multi-portal ed-tech platform combining the psychology of
+                        gaming with AI to build strong study habits. Features a "Social + Habit Loop" using Streaks,
+                        EduCoins, and Faction Wars to drive retention.
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd design the gamification
+                            mechanics deeper into the core learning loop from day one, rather than layering points on
+                            top of static content.</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">EdTech</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Gamification</span>
+                    </div>
+                    <div class="project-btn-row">
+                        <a href="https://eklavya-x.vercel.app/" target="_blank" class="pill pill-filled magnetic-btn"><i class="fas fa-bolt"></i> Live Demo</a>
+                        <a href="https://github.com/rajrishabh23959-oss/EklavyaX" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
+                    </div>
+                </div>
+
+                <!-- SentinAI -->
+                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-1" style="position:relative;">
+                    <div class="washi-tape washi-marigold"
+                        style="top:-8px;right:14px;transform:rotate(12deg);width:65px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="project-number">PROJECT / 04</div>
+                    <div class="project-title">Project SentinAI <span class="reality-tag">Research Concept</span></div>
+                    <div class="project-desc">A behavioral biometrics framework designed for banking security,
+                        leveraging AI to analyze keystroke dynamics as a continuous authentication layer. The system
+                        captures typing patterns — rhythm, pressure, and timing — to verify user identity beyond
+                        traditional passwords, adding a robust, frictionless layer of fraud detection and account
+                        protection for financial platforms.
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd implement a dynamic
+                            tolerance band for typing deviations much earlier, rather than using a rigid fingerprint
+                            that flagged legitimate tiredness as fraud.</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI Security</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Python</span>
+                    </div>
+                    <div class="project-btn-row">
+                        <a href="sentinai.html" class="pill pill-filled magnetic-btn"><i class="fas fa-rocket"></i> Live Demo</a>
+                        <a href="https://github.com/rajrishabh23959-oss/SENTIN_AI" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
+                    </div>
+                </div>
+
+                <!-- Treasure Hunter -->
+                <div class="index-card project-card tilt-card reveal reveal-d2 card-rot-2" style="position:relative;">
+                    <div class="washi-tape washi-rose"
+                        style="top:-8px;left:14px;transform:rotate(-10deg);width:65px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="project-number">PROJECT / 05</div>
+                    <div class="project-title">Treasure Hunter <span class="reality-tag">Engine Demo</span></div>
+                    <div class="project-desc">Developed a logic-driven 2D game environment entirely from scratch using
+                        PyGame, showcasing advanced object-oriented programming principles and real-time collision
+                        detection systems. The project features custom physics handling, modular class-based
+                        architecture for game entities, and optimized rendering loops — demonstrating strong
+                        fundamentals in algorithmic thinking, state management, and performance-conscious game design.
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would separate the physics
+                            update loop from the rendering loop immediately to prevent frame-rate-dependent game
+                            physics.</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Game Dev</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">PyGame</span>
+                    </div>
+                    <div class="project-btn-row">
+                        <a href="game.html" class="pill pill-filled magnetic-btn"><i class="fas fa-play"></i> Play Game</a>
+                        <a href="https://github.com/rajrishabh23959-oss/RISHABH-2D-TRESURER-HUNT-GAME" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
+                    </div>
+                </div>
+
+                <!-- MAHAN -->
+                <div class="index-card project-card tilt-card reveal reveal-d3 card-rot-1" style="position:relative;">
+                    <div class="washi-tape washi-marigold"
+                        style="top:-8px;right:14px;transform:rotate(12deg);width:65px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="project-number">PROJECT / 06</div>
+                    <div class="project-title">MAHAN <span class="reality-tag">MVP / WIP</span></div>
+                    <div class="project-desc">A full-stack micro-consulting platform enabling users to book and pay for
+                        expert sessions. Built solo with React/TS, Express, MongoDB, PostgreSQL, Razorpay, Gemini AI,
+                        and Twilio notifications.
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I'd evaluate database needs
+                            strictly per-feature earlier, instead of trying to force relational data into MongoDB before
+                            adopting PostgreSQL.</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Node.js</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">Gemini AI</span>
+                    </div>
+                    <div class="project-btn-row">
+                        <span class="pill pill-filled" style="cursor:default;"><i class="fas fa-hammer"></i> Live In Progress</span>
+                        <a href="https://github.com/rajrishabh23959-oss/MAHAN" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
+                    </div>
+                </div>
+
+                <!-- Habit Tracker -->
+                <div class="index-card project-card tilt-card reveal reveal-d3 card-rot-2" style="position:relative;">
+                    <div class="washi-tape washi-rose"
+                        style="top:-8px;left:14px;transform:rotate(-10deg);width:65px;height:16px;"></div>
+                    <div class="tilt-glare"></div>
+                    <div class="project-number">PROJECT / 07</div>
+                    <div class="project-title">HabitGame <span class="reality-tag">Prototype</span></div>
+                    <div class="project-desc">An AI-powered mobile habit tracking app built with React Native & FastAPI.
+                        Combines eco-friendly gamified UI with an AI Chatbot Coach for personalized diet and workout
+                        advice based on mood and sleep.
+                        <div class="project-rebuild"><strong>What I'd rebuild:</strong> I would decouple the AI chat
+                            from the main tracking UI more cleanly to prevent latency in logging simple habits.</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">React Native</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">FastAPI</span>
+                        <span class="pill" style="font-size:0.52rem;padding:5px 12px;">AI Coach</span>
+                    </div>
+                    <div class="project-btn-row">
+                        <span class="pill pill-filled" style="cursor:default;"><i class="fas fa-hammer"></i> Live In Progress</span>
+                        <a href="https://github.com/rajrishabh23959-oss/HABIT-GAME" target="_blank" class="pill pill-rose magnetic-btn"><i class="fab fa-github"></i> View GitHub</a>
                     </div>
                 </div>
             </div>
@@ -3014,39 +3409,97 @@
             style="position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(27,36,32,0.05) 0.6px,transparent 0.6px);background-size:26px 26px;">
         </div>
         <div class="section-inner">
-            <div class="section-eyebrow reveal">Moments</div>
-            <div class="sticky-note sticky-sage reveal">scrapbook vibes 📸</div>
-            <h2 class="section-title reveal">Gallery</h2>
+            <div class="section-eyebrow reveal">Moments &amp; Memories</div>
+            <div class="sticky-note sticky-sage reveal">scrapbook snapshots 📸</div>
+            <h2 class="section-title reveal">Photo Gallery</h2>
             <div class="stitch reveal"></div>
             <p class="reveal"
-                style="font-family:var(--font-body);font-style:italic;font-size:0.9rem;opacity:0.6;margin-bottom:30px;">
-                Placeholder tiles — swap with your own photos anytime.</p>
+                style="font-family:var(--font-body);font-style:italic;font-size:0.95rem;opacity:0.75;margin-bottom:25px;text-align:center;max-width:700px;margin-left:auto;margin-right:auto;">
+                Real snapshots from Smart India Hackathon 2026 pitching rounds at Pondicherry University and the World Tourism Day 2026 double 1st prize award ceremony. Click any photo to view full resolution!
+            </p>
 
-            <div class="gallery-grid">
-                <div class="gallery-tile gt-1 reveal reveal-d1"><i class="fas fa-school"></i>
-                    <div class="gt-label">Campus Life</div>
-                    <div class="gt-sub">Add Photo</div>
+            <!-- ALBUM FOLDERS (2 Main Folders) -->
+            <div class="albums-grid reveal" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:28px; max-width:960px; margin:0 auto 30px auto;">
+                <!-- FOLDER 1: World Tourism Day 2026 -->
+                <div class="album-folder-card" id="albumFolderTourism" onclick="openAlbum('tourism')">
+                    <div class="washi-tape washi-marigold" style="top:-9px;right:22px;transform:rotate(6deg);width:70px;height:16px;"></div>
+                    <div class="album-cover-stack">
+                        <div class="album-stack-img stack-3">
+                            <img src="Tourism_day%20quiz/travel_tech_x_cert.jpeg" alt="Travel Tech X Certificate" loading="lazy">
+                        </div>
+                        <div class="album-stack-img stack-2">
+                            <img src="Tourism_day%20quiz/stage_felicitation.jpeg" alt="Stage Felicitation Ceremony" loading="lazy">
+                        </div>
+                        <div class="album-stack-img stack-1">
+                            <img src="Tourism_day%20quiz/tourism_ai_cert_cash.jpeg" alt="Tourism AI Certificate & Cash Prize" loading="lazy">
+                        </div>
+                        <div class="album-folder-badge">
+                            <i class="fas fa-folder-open"></i> 6 Items · 1st Prize &amp; Cash
+                        </div>
+                    </div>
+                    <div class="album-title">
+                        <span>World Tourism Day 2026</span> 🏆
+                    </div>
+                    <div class="album-desc">
+                        Double 1st Prize &amp; Cash Prize collection from "Tourism AI: The Case" &amp; "Travel Tech X" competitions, award stage ceremony, and dignitaries felicitation at Pondicherry University.
+                    </div>
+                    <button class="album-open-btn">
+                        <i class="fas fa-images"></i> Open Tourism Day Album (6 Photos) →
+                    </button>
                 </div>
-                <div class="gallery-tile gt-2 reveal reveal-d2"><i class="fas fa-trophy"></i>
-                    <div class="gt-label">Smart India Hackathon</div>
-                    <div class="gt-sub">Add Photo</div>
+
+                <!-- FOLDER 2: Smart India Hackathon 2026 -->
+                <div class="album-folder-card" id="albumFolderSIH" onclick="openAlbum('sih')">
+                    <div class="washi-tape washi-rose" style="top:-9px;left:22px;transform:rotate(-7deg);width:70px;height:16px;"></div>
+                    <div class="album-cover-stack">
+                        <div class="album-stack-img stack-3">
+                            <img src="sih%202026/sih_pitch_judges.jpeg" alt="SIH Pitch to Judges" loading="lazy">
+                        </div>
+                        <div class="album-stack-img stack-2">
+                            <img src="sih%202026/sih_demo_laptop.jpeg" alt="SIH Laptop Demo" loading="lazy">
+                        </div>
+                        <div class="album-stack-img stack-1">
+                            <img src="sih%202026/sih_presentation_podium.jpeg" alt="SIH Podium Presentation" loading="lazy">
+                        </div>
+                        <div class="album-folder-badge">
+                            <i class="fas fa-folder-open"></i> 7 Items · Pitch &amp; Live Demo
+                        </div>
+                    </div>
+                    <div class="album-title">
+                        <span>Smart India Hackathon 2026</span> 🚀
+                    </div>
+                    <div class="album-desc">
+                        Team GravityX defending and demoing EklavyaX — our gamified STEM learning platform for rural classrooms before the department faculty jury &amp; evaluation panel.
+                    </div>
+                    <button class="album-open-btn">
+                        <i class="fas fa-images"></i> Open SIH 2026 Album (7 Photos) →
+                    </button>
                 </div>
-                <div class="gallery-tile gt-3 reveal reveal-d3"><i class="fas fa-laptop-code"></i>
-                    <div class="gt-label">Coding Sessions</div>
-                    <div class="gt-sub">Add Photo</div>
+            </div>
+
+            <!-- EXPANDED ALBUM VIEW (Revealed when a folder is clicked) -->
+            <div id="albumExpandedView" class="album-view-container">
+                <div class="album-view-header">
+                    <div>
+                        <div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--rose);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">
+                            Active Folder Gallery
+                        </div>
+                        <h3 id="albumActiveTitle" style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:var(--ink);margin:0;">
+                            World Tourism Day 2026
+                        </h3>
+                        <p id="albumActiveSub" style="font-family:var(--font-body);font-size:0.85rem;color:#555;margin:4px 0 0 0;font-style:italic;">
+                            6 Photos &amp; Certificates · Click any photo for high-resolution view
+                        </p>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center;">
+                        <button class="pill pill-rose" id="albumCloseBtn" onclick="closeAlbum()" style="font-size:0.65rem;padding:7px 16px;cursor:pointer;">
+                            <i class="fas fa-times"></i> Close Album ✕
+                        </button>
+                    </div>
                 </div>
-                <div class="gallery-tile gt-4 reveal reveal-d4"><i class="fas fa-users"></i>
-                    <div class="gt-label">Team &amp; Events</div>
-                    <div class="gt-sub">Add Photo</div>
-                </div>
-                <div class="gallery-tile gt-5 reveal reveal-d5"><i class="fas fa-brain"></i>
-                    <div class="gt-label">Pragyan Tech Fest</div>
-                    <div class="gt-sub">Add Photo</div>
-                </div>
-                <div class="gallery-tile gt-6 reveal reveal-d6"><i class="fas fa-gamepad"></i>
-                    <div class="gt-label">Treasure Hunter Dev</div>
-                    <div class="gt-sub">Add Photo</div>
-                </div>
+
+                <!-- Polaroids container for the active album -->
+                <div class="gallery-grid" id="albumPolaroidGrid"></div>
             </div>
         </div>
     </section>
@@ -3073,7 +3526,36 @@
             <div class="stitch reveal"></div>
 
             <div class="badges-grid">
+                <!-- 1st Prize — Tourism AI: The Case -->
+                <div class="index-card badge-row reveal reveal-d1" style="position:relative; cursor:pointer;" onclick="openLightboxDirect('Tourism_day%20quiz/tourism_ai_cert_cash.jpeg', '1st Prize 🥇 — Tourism AI: The Case', 'Official Certificate of Achievement and Cash Prize money won at World Tourism Day Celebrations 2026, Pondicherry University. Theme: Digital Agenda and Artificial Intelligence to Redesign Tourism.', 'World Tourism Day 2026 · 1st Place', 'School of Management · Pondicherry University', 'September 2026')">
+                    <div class="washi-tape washi-marigold" style="top:-8px;right:14px;transform:rotate(9deg);width:55px;height:14px;"></div>
+                    <div class="badge-icon-circle" style="border-color:var(--marigold);color:var(--marigold);">🥇</div>
+                    <div>
+                        <div class="badge-title">1st Prize — Tourism AI: The Case <span style="font-size:0.62rem;color:var(--marigold);font-family:var(--font-mono);font-weight:700;margin-left:6px;border:1px solid rgba(235,160,55,0.4);border-radius:12px;padding:2px 8px;letter-spacing:0.02em;">💵 Cash Prize Won</span></div>
+                        <div class="badge-sub">World Tourism Day 2026 · Pondicherry University. Secured 1st place &amp; cash prize for AI-driven tourism solutions. <span style="color:var(--marigold-glow);font-size:0.75rem;font-weight:600;"><i class="fas fa-image"></i> Click to view cert</span></div>
+                    </div>
+                </div>
+
+                <!-- 1st Prize — Travel Tech X -->
+                <div class="index-card badge-row reveal reveal-d1" style="position:relative; cursor:pointer;" onclick="openLightboxDirect('Tourism_day%20quiz/travel_tech_x_cert.jpeg', '1st Prize 🥇 — Travel Tech X', 'Official Certificate of Achievement for securing First Place in the flagship Travel Tech X competition during World Tourism Day Celebrations 2026 at Pondicherry University.', 'World Tourism Day 2026 · 1st Place', 'School of Management · Pondicherry University', 'September 2026')">
+                    <div class="washi-tape washi-rose" style="top:-8px;left:14px;transform:rotate(-10deg);width:55px;height:14px;"></div>
+                    <div class="badge-icon-circle" style="border-color:var(--rose);color:var(--rose);">🏆</div>
+                    <div>
+                        <div class="badge-title">1st Prize — Travel Tech X <span style="font-size:0.62rem;color:var(--marigold);font-family:var(--font-mono);font-weight:700;margin-left:6px;border:1px solid rgba(235,160,55,0.4);border-radius:12px;padding:2px 8px;letter-spacing:0.02em;">💵 Cash Prize Won</span></div>
+                        <div class="badge-sub">World Tourism Day 2026 · Pondicherry University. Clinched 1st place &amp; cash prize in premier travel technology challenge. <span style="color:var(--marigold-glow);font-size:0.75rem;font-weight:600;"><i class="fas fa-image"></i> Click to view cert</span></div>
+                    </div>
+                </div>
                 <div class="index-card badge-row reveal reveal-d1" style="position:relative;">
+                    <div class="washi-tape washi-sage"
+                        style="top:-8px;right:16px;transform:rotate(9deg);width:55px;height:14px;"></div>
+                    <div class="badge-icon-circle" style="border-color:var(--sage);color:var(--sage);">🚀</div>
+                    <div>
+                        <div class="badge-title">SIH 2026 Participant</div>
+                        <div class="badge-sub">Smart India Hackathon — Team GravityX, building EklavyaX, a gamified STEM
+                            learning platform connecting rural and semi-urban students with teachers.</div>
+                    </div>
+                </div>
+                <div class="index-card badge-row reveal reveal-d2" style="position:relative;">
                     <div class="washi-tape washi-rose"
                         style="top:-8px;left:14px;transform:rotate(-12deg);width:55px;height:14px;"></div>
                     <div class="badge-icon-circle" style="border-color:var(--sage);color:var(--sage);">💻</div>
@@ -3092,7 +3574,7 @@
                             leadership, and national commitment.</div>
                     </div>
                 </div>
-                <div class="index-card badge-row reveal reveal-d2" style="position:relative;">
+                <div class="index-card badge-row reveal reveal-d3" style="position:relative;">
                     <div class="washi-tape washi-rose"
                         style="top:-8px;left:12px;transform:rotate(-8deg);width:55px;height:14px;"></div>
                     <div class="badge-icon-circle">🏆</div>
@@ -3120,16 +3602,6 @@
                     </div>
                 </div>
                 <div class="index-card badge-row reveal reveal-d5" style="position:relative;">
-                    <div class="washi-tape washi-sage"
-                        style="top:-8px;right:16px;transform:rotate(9deg);width:55px;height:14px;"></div>
-                    <div class="badge-icon-circle" style="border-color:var(--sage);color:var(--sage);">🚀</div>
-                    <div>
-                        <div class="badge-title">SIH 2026 Participant</div>
-                        <div class="badge-sub">Smart India Hackathon — Team GravityX, building EklavyaX, a gamified STEM
-                            learning platform connecting rural and semi-urban students with teachers.</div>
-                    </div>
-                </div>
-                <div class="index-card badge-row reveal reveal-d5" style="position:relative;">
                     <div class="badge-icon-circle">🧠</div>
                     <div>
                         <div class="badge-title">Pragyan Quiz</div>
@@ -3148,7 +3620,7 @@
 
             <p class="reveal"
                 style="font-family:var(--font-hand);font-size:1.1rem;color:var(--sage);transform:rotate(1.5deg);margin-top:30px;text-align:center;">
-                NDA + JEE Advanced + 100 in math — my parents are still not impressed 😂
+                Two 1st prizes with cash prize + SIH 2026 + JEE Advanced + 100 in math — my parents are still not impressed 😂
             </p>
         </div>
     </section>
@@ -3298,6 +3770,30 @@
             </div>
         </div>
     </section>
+
+    <!-- ===================== UNIVERSAL LIGHTBOX MODAL ===================== -->
+    <div class="lightbox-modal" id="lightboxModal" role="dialog" aria-modal="true" aria-label="Photo Lightbox">
+        <div class="lightbox-panel" id="lightboxPanel">
+            <button class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Close modal"><i class="fas fa-xmark"></i></button>
+            <div class="lightbox-img-wrap">
+                <img id="lightboxImg" src="" alt="Enlarged view">
+                <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrevBtn" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
+                <button class="lightbox-nav-btn lightbox-next" id="lightboxNextBtn" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="lightbox-info">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <span class="pill pill-filled" id="lightboxTag" style="font-size:0.56rem;padding:4px 12px;background:var(--marigold);color:var(--ink);font-weight:700;">Moment</span>
+                    <span id="lightboxCounter" style="font-family:var(--font-mono);font-size:0.6rem;color:#888;">1 / 13</span>
+                </div>
+                <h3 id="lightboxTitle" style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--ink);margin:4px 0 2px 0;">Photo Title</h3>
+                <p id="lightboxNote" style="font-family:var(--font-body);font-style:italic;font-size:0.95rem;color:var(--ink);opacity:0.85;line-height:1.5;">Photo description note.</p>
+                <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.58rem;color:#666;margin-top:4px;">
+                    <span id="lightboxLocation"><i class="fas fa-location-dot"></i> Pondicherry University</span>
+                    <span id="lightboxDate"><i class="fas fa-calendar"></i> September 2026</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===================== BLOG ARTICLE OVERLAY ===================== -->
     <div class="blog-overlay" id="blogOverlay">
@@ -3511,7 +4007,7 @@
     <!-- ===================== FOOTER (LIGHT) ===================== -->
     <footer class="section-light" style="border-top: 3px solid var(--ink);">
         <div class="footer-name">Rishabh Raj</div>
-        <div class="footer-tagline">Banking Technology · Pondicherry University · © 2026</div>
+        <div class="footer-tagline">Banking Technology & CSBS · Pondicherry University · © 2026</div>
         <div class="footer-nav">
             <a href="#hero">Home</a><a href="#about">About</a><a href="#education">Education</a>
             <a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#gallery">Gallery</a>
@@ -3947,6 +4443,294 @@
             // Escape key to close
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') closeBlogArticle();
+            });
+
+            // ==============================
+            // SCRAPBOOK GALLERY & LIGHTBOX
+            // ==============================
+            const galleryData = [
+                {
+                    src: 'Tourism_day%20quiz/stage_felicitation.jpeg',
+                    title: 'Receiving 1st Prize on Stage 🏆',
+                    tag: 'World Tourism Day 2026 · 1st Prize',
+                    note: 'Felicitation ceremony on stage by dignitaries at the School of Management Auditorium for winning 1st place in Tourism AI & Travel Tech X.',
+                    location: 'Auditorium · Pondicherry University',
+                    date: '25 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_presentation_podium.jpeg',
+                    title: 'Pitching EklavyaX at the Podium 🚀',
+                    tag: 'Smart India Hackathon 2026',
+                    note: 'Presenting EklavyaX — our gamified STEM learning platform designed by Team GravityX connecting students in rural and semi-urban areas with mentors.',
+                    location: 'Dept of Computer Science · Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'Tourism_day%20quiz/tourism_ai_cert_cash.jpeg',
+                    title: '1st Prize & Cash Prize Money 💵',
+                    tag: 'Tourism AI: The Case · 1st Place',
+                    note: 'Certificate of Achievement and Cash Prize award money for winning First Place in the "Tourism AI: The Case" challenge during World Tourism Day Celebrations.',
+                    location: 'Pondicherry University',
+                    date: '23 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_demo_laptop.jpeg',
+                    title: 'Live Demo to Evaluators 💻',
+                    tag: 'SIH 2026 · Jury Review',
+                    note: 'Live demonstration of the working EklavyaX prototype on laptop directly to senior faculty evaluators and department professors.',
+                    location: 'Centre for Pollution Control & Env Engg Hall, PU',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'Tourism_day%20quiz/travel_tech_x_cert.jpeg',
+                    title: 'Travel Tech X — 1st Place 🥇',
+                    tag: 'Travel Tech X · 1st Place',
+                    note: 'Official Certificate of Achievement for winning First Place in the flagship Travel Tech X competition during World Tourism Day Celebrations 2026.',
+                    location: 'School of Management · Pondicherry University',
+                    date: '23 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_pitch_judges.jpeg',
+                    title: 'Defending the Tech Architecture 🎙️',
+                    tag: 'SIH 2026 · Pitch Round',
+                    note: 'Explaining our technical architecture, low-latency sync, offline-first mechanisms, and gamified reward loops to the evaluation panel.',
+                    location: 'Dept of Computer Science · Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'Tourism_day%20quiz/rishabh_award_banner.jpeg',
+                    title: 'Proud Moment with the Banner ✨',
+                    tag: 'World Tourism Day 2026',
+                    note: 'Holding the Certificate of Achievement and Cash Prize envelope in front of the "Digital Agenda & AI to Redesign Tourism" event banner.',
+                    location: 'School of Management · Pondicherry University',
+                    date: '25 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_feasibility_slide.jpeg',
+                    title: 'Feasibility & Viability Presentation 📊',
+                    tag: 'SIH 2026 · Strategy',
+                    note: 'Presenting economic viability, scalable rollouts for schools, market benchmarks, and social impact indicators for EklavyaX.',
+                    location: 'Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'Tourism_day%20quiz/group_winners_stage.jpeg',
+                    title: 'Dignitaries & Winners Ceremony 🎓',
+                    tag: 'World Tourism Day 2026',
+                    note: 'Grand stage group photograph with all competition winners, university dignitaries, panel chairs, and organizing faculty.',
+                    location: 'School of Management Auditorium · PU',
+                    date: '25 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_demo_jury_review.jpeg',
+                    title: 'In-Depth Evaluation & Q&A 💡',
+                    tag: 'SIH 2026 · Evaluation',
+                    note: 'Answering probing questions from the professor jury regarding curriculum adaptation, data security, and student engagement telemetry.',
+                    location: 'Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'Tourism_day%20quiz/tourism_ai_cert_envelope.jpeg',
+                    title: 'Certificate & Prize Envelope ✉️',
+                    tag: 'Cash Prize · World Tourism Day 2026',
+                    note: 'Close-up shot of the Certificate of Achievement and the Department of Tourism Studies cash prize presentation envelope.',
+                    location: 'Pondicherry University',
+                    date: '30 September 2026',
+                    cat: 'tourism'
+                },
+                {
+                    src: 'sih%202026/sih_team_gravityx.jpeg',
+                    title: 'Team GravityX Collaborating ⚡',
+                    tag: 'SIH 2026 · Teamwork',
+                    note: 'Team GravityX presenting the core problem statement of STEM disengagement in rural classrooms and our solution approach.',
+                    location: 'Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                },
+                {
+                    src: 'sih%202026/sih_presentation_wide.jpeg',
+                    title: 'Department Presentation Hall 🏛️',
+                    tag: 'SIH 2026 · Internal Round',
+                    note: 'Wide hall perspective during the internal hackathon evaluations for Smart India Hackathon 2026.',
+                    location: 'Dept of Computer Science · Pondicherry University',
+                    date: '17 September 2026',
+                    cat: 'sih'
+                }
+            ];
+
+            let currentLightboxIndex = 0;
+            let currentLightboxList = galleryData;
+
+            function showLightboxAtIndex(idx, list) {
+                currentLightboxList = list || galleryData;
+                currentLightboxIndex = (idx + currentLightboxList.length) % currentLightboxList.length;
+                const item = currentLightboxList[currentLightboxIndex];
+
+                const modal = document.getElementById('lightboxModal');
+                const img = document.getElementById('lightboxImg');
+                const title = document.getElementById('lightboxTitle');
+                const note = document.getElementById('lightboxNote');
+                const tag = document.getElementById('lightboxTag');
+                const loc = document.getElementById('lightboxLocation');
+                const date = document.getElementById('lightboxDate');
+                const counter = document.getElementById('lightboxCounter');
+
+                img.src = item.src;
+                img.alt = item.title;
+                title.textContent = item.title;
+                note.textContent = item.note || '';
+                tag.textContent = item.tag || 'Moment';
+                loc.innerHTML = `<i class="fas fa-location-dot"></i> ${item.location || 'Pondicherry University'}`;
+                date.innerHTML = `<i class="fas fa-calendar"></i> ${item.date || 'September 2026'}`;
+                counter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxList.length}`;
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeLightbox() {
+                const modal = document.getElementById('lightboxModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            // Expose globally for onclick handlers
+            window.openLightboxDirect = function(src, title, note, tag, location, date) {
+                const foundIdx = galleryData.findIndex(item => item.src === src);
+                if (foundIdx !== -1) {
+                    showLightboxAtIndex(foundIdx, galleryData);
+                } else {
+                    const tempItem = [{ src, title, note, tag, location, date }];
+                    showLightboxAtIndex(0, tempItem);
+                }
+            };
+
+            // ==============================
+            // ALBUM & FOLDER INTERACTION LOGIC
+            // ==============================
+            let activeAlbumCategory = null;
+
+            window.openAlbum = function(cat) {
+                activeAlbumCategory = cat;
+                const container = document.getElementById('albumExpandedView');
+                const grid = document.getElementById('albumPolaroidGrid');
+                const titleEl = document.getElementById('albumActiveTitle');
+                const subEl = document.getElementById('albumActiveSub');
+                const folderTourism = document.getElementById('albumFolderTourism');
+                const folderSIH = document.getElementById('albumFolderSIH');
+
+                if (cat === 'tourism') {
+                    titleEl.innerHTML = 'World Tourism Day 2026 🏆';
+                    subEl.innerHTML = '6 Photos &amp; Certificates · Double 1st Prize &amp; Cash Prize Collection at Pondicherry University';
+                    folderTourism.style.borderColor = 'var(--marigold)';
+                    folderTourism.style.boxShadow = '6px 6px 0 var(--marigold)';
+                    folderSIH.style.borderColor = 'var(--ink)';
+                    folderSIH.style.boxShadow = 'var(--shadow-hard-sm)';
+                } else {
+                    titleEl.innerHTML = 'Smart India Hackathon 2026 🚀';
+                    subEl.innerHTML = '7 Pitch &amp; Live Demo Photos · Team GravityX presenting EklavyaX to Faculty Jury';
+                    folderSIH.style.borderColor = 'var(--rose)';
+                    folderSIH.style.boxShadow = '6px 6px 0 var(--rose)';
+                    folderTourism.style.borderColor = 'var(--ink)';
+                    folderTourism.style.boxShadow = 'var(--shadow-hard-sm)';
+                }
+
+                const filtered = galleryData.filter(item => item.cat === cat);
+                grid.innerHTML = '';
+
+                const washiClasses = ['washi-marigold', 'washi-rose', 'washi-sage'];
+                const rotations = [-2, 1.8, -1.5, 2.2, -1.8, 1.4, -2.2];
+
+                filtered.forEach((item, i) => {
+                    const washi = washiClasses[i % washiClasses.length];
+                    const rot = rotations[i % rotations.length];
+                    const card = document.createElement('div');
+                    card.className = 'polaroid-card reveal visible';
+                    card.style.transform = `rotate(${rot}deg)`;
+                    card.innerHTML = `
+                        <div class="washi-tape ${washi}" style="top:-9px;${i % 2 === 0 ? 'left:24px;' : 'right:24px;'}transform:rotate(${rot > 0 ? '4deg' : '-4deg'});width:65px;height:15px;"></div>
+                        <div class="polaroid-img-frame">
+                            <img src="${item.src}" alt="${item.title}" loading="lazy">
+                            <span class="polaroid-tag ${item.cat === 'tourism' ? 'gold' : ''}"><i class="fas ${item.cat === 'tourism' ? 'fa-trophy' : 'fa-camera'}"></i> ${item.tag}</span>
+                        </div>
+                        <div class="polaroid-caption">
+                            <div class="polaroid-title">${item.title}</div>
+                            <div class="polaroid-meta">
+                                <span>${item.location}</span>
+                                <span class="polaroid-zoom-hint"><i class="fas fa-expand"></i> View Full</span>
+                            </div>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => {
+                        showLightboxAtIndex(i, filtered);
+                    });
+                    grid.appendChild(card);
+                });
+
+                container.classList.add('active');
+                setTimeout(() => {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            };
+
+            window.closeAlbum = function() {
+                const container = document.getElementById('albumExpandedView');
+                const folderTourism = document.getElementById('albumFolderTourism');
+                const folderSIH = document.getElementById('albumFolderSIH');
+
+                container.classList.remove('active');
+                folderTourism.style.borderColor = 'var(--ink)';
+                folderTourism.style.boxShadow = 'var(--shadow-hard-sm)';
+                folderSIH.style.borderColor = 'var(--ink)';
+                folderSIH.style.boxShadow = 'var(--shadow-hard-sm)';
+
+                const gallerySection = document.getElementById('gallery');
+                if (gallerySection) {
+                    gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            // Lightbox controls
+            const lbClose = document.getElementById('lightboxCloseBtn');
+            if (lbClose) lbClose.addEventListener('click', closeLightbox);
+
+            const lbPrev = document.getElementById('lightboxPrevBtn');
+            if (lbPrev) lbPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showLightboxAtIndex(currentLightboxIndex - 1, currentLightboxList);
+            });
+
+            const lbNext = document.getElementById('lightboxNextBtn');
+            if (lbNext) lbNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showLightboxAtIndex(currentLightboxIndex + 1, currentLightboxList);
+            });
+
+            const lbModal = document.getElementById('lightboxModal');
+            if (lbModal) {
+                lbModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeLightbox();
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                const modal = document.getElementById('lightboxModal');
+                if (!modal || !modal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') showLightboxAtIndex(currentLightboxIndex - 1, currentLightboxList);
+                if (e.key === 'ArrowRight') showLightboxAtIndex(currentLightboxIndex + 1, currentLightboxList);
             });
 
             // ==============================
